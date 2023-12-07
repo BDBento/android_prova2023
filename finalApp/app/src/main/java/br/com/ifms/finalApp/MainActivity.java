@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         criaUL = findViewById(R.id.criaUL);
         esqueciSL = findViewById(R.id.esqueciSL);
 
+
         mAuth = FirebaseAuth.getInstance();
 
         esqueciSL.setOnClickListener(new View.OnClickListener() {
