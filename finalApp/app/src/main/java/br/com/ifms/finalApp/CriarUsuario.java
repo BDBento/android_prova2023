@@ -40,9 +40,7 @@ public class CriarUsuario extends AppCompatActivity {
                             Toast.makeText(CriarUsuario.this, "Usuário criado. Verifique seu e-mail.", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(CriarUsuario.this, "Usuário NÃO foi criado.", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(MainActivity.this, "Usuário NÃO foi criado.", Toast.LENGTH_SHORT).show();
-                        }
+                        } 
                     }
                 });
             }
