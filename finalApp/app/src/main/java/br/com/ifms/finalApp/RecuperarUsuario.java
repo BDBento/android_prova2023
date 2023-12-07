@@ -12,6 +12,8 @@ public class RecuperarUsuario extends AppCompatActivity {
 
     EditText ed_email;
 
+    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,6 +22,22 @@ public class RecuperarUsuario extends AppCompatActivity {
         bt = findViewById(R.id.button_rec_senha);
 
         ed_email = findViewById(R.id.editTex_email_valido);
+
+        bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String email = ed_email.getText().toString();
+                // enviar email para recuperacao de senha
+                mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful())
+                            Toast.makeText(RecuperarUsuario.this, "Email de recuperacao de senha enviado.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
 
     }
 }

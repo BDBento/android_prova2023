@@ -24,5 +24,30 @@ public class CriarUsuario extends AppCompatActivity {
         ed_senha = findViewById(R.id.edit_cria_senha);
 
 
+        bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String email = ed_email.getText().toString();
+                String senha = ed_senha.getText().toString();
+                // cria usuário
+                mAuth.createUserWithEmailAndPassword(email, senha).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
+                            usuario.sendEmailVerification();
+
+                            Toast.makeText(CriarUsuario.this, "Usuário criado. Verifique seu e-mail.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(CriarUsuario.this, "Usuário NÃO foi criado.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Usuário NÃO foi criado.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
+    
+
     }
 }
