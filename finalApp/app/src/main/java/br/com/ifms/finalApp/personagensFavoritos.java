@@ -31,9 +31,9 @@ import java.util.ArrayList;
 //contudo com dados vindos do Firebase
 public class personagensFavoritos extends AppCompatActivity {
 
-    TextView textViewLogout;
+    TextView edLogoff;
     SearchView searchView;
-    RecyclerView recyclerView;
+    RecyclerView edRecyclerView;
     ArrayList<Personagem> listaPersonagens = new ArrayList<>();
     MRecyclerAdapter recyclerAdapter;
     FirebaseDatabase firebaseDatabase;
@@ -44,46 +44,32 @@ public class personagensFavoritos extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personagens_favoritos);
 
-        recyclerView = findViewById(R.id.recyclerViewFav);
-        textViewLogout = findViewById(R.id.textViewLogout);
+        edRecyclerView = findViewById(R.id.recyclerViewFav);
+        edLogoff = findViewById(R.id.textViewLogout);
         searchView = findViewById(R.id.searchViewFav);
 
-        //searchView aberto
         searchView.setIconified(false);
-        //retira o foco automático e fecha o teclado ao iniciar a aplicação
         searchView.clearFocus();
 
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
 
-        //botão para efetuar logout
-        textViewLogout.setOnClickListener(new View.OnClickListener() {
+        edLogoff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
-
                 Toast.makeText(personagensFavoritos.this, "Logout", Toast.LENGTH_LONG).show();
-
                 startActivity(new Intent(personagensFavoritos.this, MainActivity.class));
             }
         });
 
-        //método para consultar o Firebase e popular o arraylist com os dados
         setInfo();
 
-        //novamente, após a primeira exibição (acima), o usuário pode
-        //fazer uma consulta de um termo entre os Pesonagens favoritos salvos
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
             public boolean onQueryTextSubmit(String s) {
-                //método filtrar() definido na classe RecyclerAdapter,
-                //parâmetro = o que foi digitado na busca
-                //diferente da abordagem da tela UsuarioLogado pois
-                //os dados já estão salvos e o array populado, não é necessária nova requisição ou
-                //nova busca no banco ou nova url
                 recyclerAdapter.filtrar(s);
-                //notifica o adapter para alterações na lista
                 recyclerAdapter.notifyDataSetChanged();
                 return true;
             }
@@ -142,7 +128,7 @@ public class personagensFavoritos extends AppCompatActivity {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
 
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(recyclerAdapter);
+        edRecyclerView.setLayoutManager(layoutManager);
+        edRecyclerView.setAdapter(recyclerAdapter);
     }
 }

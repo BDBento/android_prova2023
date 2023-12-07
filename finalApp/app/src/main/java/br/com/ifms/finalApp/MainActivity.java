@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -57,18 +58,18 @@ public class MainActivity extends AppCompatActivity {
                 mAuth.signInWithEmailAndPassword(email, senha).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            //verificar usuário logado
-                            FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
-                            Intent intent = new Intent(MainActivity.this, listaDePersonagens.class);
-                            startActivity(intent);
-                            if (usuario.isEmailVerified()) {
-                                 Toast.makeText(MainActivity.this, "Usuário logado.", Toast.LENGTH_SHORT).show();
+                            if (task.isSuccessful()) {
+                                //verificar usuário logado
+                                FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
+                                Intent intent = new Intent(MainActivity.this, listaDePersonagens.class);
+                                startActivity(intent);
+                                if (usuario.isEmailVerified()) {
+                                    Toast.makeText(MainActivity.this, "Usuário logado.", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(MainActivity.this, "Usuário não verificado. Verifique seu e-mail.", Toast.LENGTH_SHORT).show();
+                                }
                             } else {
-                                 Toast.makeText(MainActivity.this, "Usuário não verificado. Verifique seu e-mail.", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(MainActivity.this, "Erro ao logar.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "Erro ao logar.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

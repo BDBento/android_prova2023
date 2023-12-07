@@ -65,7 +65,6 @@ public class MRecyclerAdapter extends RecyclerView.Adapter<MRecyclerAdapter.MVie
     //class ViewHolder de conexão com os elementos da tela e config do Firebase Realtime Database
     public class MViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-
         TextView name_, status_, species_, gender_;
         ImageView image_;
 
@@ -86,20 +85,12 @@ public class MRecyclerAdapter extends RecyclerView.Adapter<MRecyclerAdapter.MVie
 
         @Override
         public void onClick(View view) {
-            //onClick no item da RecyclerView
-            //tem dois comportamentos:
-            //1 - se estivermos na tela de listagem da API: confirmação + salvar nos favoritos
-            //2 - se estivermos na tela dos favoritos: confirmação + exclusão dos favoritos
-            //utilizamos este mesmo RecyclerAdapter para ambas, então necessário validar a tela:
-
-            //1 - se estou na tela UsuarioLogado (listagem da API)
-            if (view.getContext().toString().contains("UsuarioLogado")) {
+            if (view.getContext().toString().contains("listaDePersonagens")) {
                 new AlertDialog.Builder(view.getContext())
-                        .setTitle("Salvar filme")
+                        .setTitle("Salvar Personagem")
                         .setMessage("Confirma salvar nos favoritos?")
                         .setIcon(R.drawable.ic_baseline_favorite_border_24)
                         .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                            //click no botão de ok, salvar no Firebase, método "inserirEm()"
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 Toast.makeText(view.getContext(), "Personagem salvo nos favoritos.", Toast.LENGTH_SHORT).show();
                                 inserirEm(getLayoutPosition());
@@ -108,7 +99,6 @@ public class MRecyclerAdapter extends RecyclerView.Adapter<MRecyclerAdapter.MVie
                         })
                         .setNegativeButton("Não", null).show();
             }
-            //2 - estou na tela de favoritos, remover item
             else {
                 new AlertDialog.Builder(view.getContext())
                         .setTitle("Remover")
@@ -124,61 +114,37 @@ public class MRecyclerAdapter extends RecyclerView.Adapter<MRecyclerAdapter.MVie
                         .setNegativeButton("Não", null).show();
             }
         }
-
-        //inserção no Firebase - filmes favoritos do usuário
         private void inserirEm(int layoutPosition) {
-            //id do usuário logado no momento
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-            //objeto da lista clicado
             Personagem pers = listaPersonagemLocal.get(layoutPosition);
 
-            //salvo o objeto no Firebase
-            //este caminho é totalmente opcional
-            //estrutura escolhida para salvar no banco:
-            // nó id do usuário --> nó "Filmes --> nós "Títulos de filme" --> valores dos atributos
             databaseReference.child(user.getUid()).
                     child("Personagens").
                     child(pers.getName()).
                     setValue(pers);
-            //todo firebase não aceita no caminho, substituir  '.', '#', '$', '[', e ']'
-            //erro ao tentar salvar título de filme com os caracteres acima
         }
 
     }
 
-    //remover no Firebase - filmes favoritos do usuário
     public void removerEm(int layoutPosition) {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        Personagem f = listaPersonagemLocal.get(layoutPosition);
-
-        //importante: sem esta linha o array não é atualizado corretamente
-        //limpa o array para correta renderização da lista
-        //após remoção, array será remontado com os valores restantes do firebase
+        Personagem per = listaPersonagemLocal.get(layoutPosition);
         listaPersonagemLocal.clear();
 
-        databaseReference.child(user.getUid()).child("Filmes").
-                child(f.getName()).
+        databaseReference.child(user.getUid()).child("Personagens").
+                child(per.getName()).
                 removeValue();
     }
 
     public void filtrar(String text) {
-        //limpando array que monta a lista ao buscar algum termo na searchView
         listaPersonagemLocal.clear();
-
-        //digitou algo e apagou = trazer todos
-        //lembrando que filmeArrayListCopia contém toda a informação original
-        //(populado no construtor)
         if (text.isEmpty()) {
             listaPersonagemLocal.addAll(listaPersonagemCopia);
         } else {
-            //algum texto digitado na busca
-            //converte para letra minúscula para não haver distinção
             text = text.toLowerCase();
-            //percorre o array com os dados originais (todos os favoritos)
             for (Personagem personagem : listaPersonagemCopia) {
-                //caso, nos dados originais, exista o termo procurado, popule o array vazio com o item
                 if (personagem.getName().toLowerCase().contains(text) ||
                         personagem.getStatus().toLowerCase().contains(text) ||
                         personagem.getSpecies().toLowerCase().contains(text) ||
