@@ -1,28 +1,18 @@
 package br.com.ifms.finalApp;
 
 class Personagem {
-    Long id;
     String name;
     String status;
     String species;
     String gender;
-    int image;
+    String image;
 
-    public Personagem(Long id, String name, String status, String species, String gender, int image) {
-        this.id = id;
+    public Personagem(String name, String status, String species, String gender, String image) {
         this.name = name;
         this.status = status;
         this.species = species;
         this.gender = gender;
         this.image = image;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -57,11 +47,11 @@ class Personagem {
         this.gender = gender;
     }
 
-    public int getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(int image) {
+    public void setImage(String image) {
         this.image = image;
     }
 }

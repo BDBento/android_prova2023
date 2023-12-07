@@ -13,6 +13,14 @@
         android:theme="@style/Theme.FinalApp"
         tools:targetApi="31">
         <activity
+            android:name=".personagensFavoritos"
+            android:exported="false"
+            android:label="@string/title_activity_personagens_favoritos"
+            android:theme="@style/Theme.FinalApp" />
+        <activity
+            android:name=".listaDePersonagens"
+            android:exported="false" />
+        <activity
             android:name=".CriarUsuario"
             android:exported="false" />
         <activity
